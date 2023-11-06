@@ -3,6 +3,7 @@ plugins {
     id("org.jetbrains.kotlin.android")
     kotlin("kapt")
     id("com.google.dagger.hilt.android")
+    id("androidx.navigation.safeargs.kotlin")
 }
 
 android {
@@ -34,14 +35,17 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "17"
     }
 
-    buildFeatures { buildConfig = true }
+    buildFeatures {
+        buildConfig = true
+        viewBinding = true
+    }
 
     // Allow references to generated code
     kapt {
@@ -59,6 +63,7 @@ dependencies {
     val okhttp = "4.11.0"
     val lifecycle = "2.6.2"
     val hilt = "2.44"
+    val nav = "2.5.3"
 
     implementation("androidx.core:core-ktx:1.9.0")
     implementation("androidx.appcompat:appcompat:1.6.1")
@@ -81,4 +86,7 @@ dependencies {
     kapt("androidx.lifecycle:lifecycle-compiler:$lifecycle")
     implementation("com.google.dagger:hilt-android:$hilt")
     kapt("com.google.dagger:hilt-android-compiler:$hilt")
+    implementation("androidx.navigation:navigation-fragment-ktx:$nav")
+    implementation("androidx.navigation:navigation-ui-ktx:$nav")
+
 }
