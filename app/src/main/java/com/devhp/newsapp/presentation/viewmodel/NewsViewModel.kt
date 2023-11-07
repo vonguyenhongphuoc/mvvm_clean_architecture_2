@@ -18,10 +18,9 @@ class NewsViewModel(private val app: Application, private val getNewsHeadlinesUs
      val newsHeadLines: MutableLiveData<Resource<APIResponse>> = MutableLiveData()
 
     fun getNewsHeadLines(country: String, page: Int) = viewModelScope.launch(Dispatchers.IO) {
-
+        newsHeadLines.postValue(Resource.Loading())
         try {
             if (isInternetAvailable(app)) {
-                newsHeadLines.postValue(Resource.Loading())
                 val apiResult = getNewsHeadlinesUseCase.execute(country, page)
                 newsHeadLines.postValue(apiResult)
             } else {

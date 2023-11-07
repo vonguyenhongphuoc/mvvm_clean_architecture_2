@@ -1,20 +1,23 @@
 package com.devhp.newsapp.presentation.fragment
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AbsListView
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.devhp.newsapp.data.util.Resource
 import com.devhp.newsapp.databinding.FragmentNewsBinding
 import com.devhp.newsapp.presentation.MainActivity
 import com.devhp.newsapp.presentation.adapter.NewsAdapter
+import com.devhp.newsapp.presentation.util.AppLog
 import com.devhp.newsapp.presentation.viewmodel.NewsViewModel
-import javax.inject.Inject
 
 class NewsFragment : Fragment() {
     private lateinit var binding: FragmentNewsBinding
@@ -40,7 +43,27 @@ class NewsFragment : Fragment() {
         newsAdapter = (activity as MainActivity).newsAdapter
         initRecyclerView()
         viewNewsList()
+        requireActivity().onBackPressedDispatcher.addCallback(callback)
     }
+
+    private val callback = object : OnBackPressedCallback(true) {
+        override fun handleOnBackPressed() {
+            if (page > 1) {
+                page--
+                viewModel.getNewsHeadLines(country, page)
+                isScrolling = false
+            } else {
+                this.isEnabled = false
+                requireActivity().onBackPressedDispatcher.onBackPressed()
+            }
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        callback.isEnabled = true
+    }
+
 
     private fun viewNewsList() {
         viewModel.getNewsHeadLines(country, page)
@@ -54,14 +77,17 @@ class NewsFragment : Fragment() {
                     hideProgressBar()
                     response.data?.let {
                         newsAdapter.differ.submitList(it.articles.toList())
+                        AppLog.logD(it.totalResults.toString())
                         pages = if (it.totalResults % 20 == 0) {
                             it.totalResults / 20
                         } else {
                             it.totalResults / 20 + 1
                         }
+                        AppLog.logD("Pages: $pages - Page: $page")
                         isLastPage = page == pages
 
                     }
+
                 }
 
                 is Resource.Error -> {
@@ -91,7 +117,7 @@ class NewsFragment : Fragment() {
 
     private fun hideProgressBar() {
         isLoading = false
-        binding.progressbar.visibility = View.GONE
+        binding.progressbar.visibility = View.INVISIBLE
     }
 
     private val onScrollListener = object : RecyclerView.OnScrollListener() {
@@ -107,7 +133,7 @@ class NewsFragment : Fragment() {
             val layoutManager = binding.rcNews.layoutManager as LinearLayoutManager
             val sizeOfTheCurrentList = layoutManager.itemCount
             val visibleItems = layoutManager.childCount
-            val topPosition = layoutManager.findFirstCompletelyVisibleItemPosition()
+            val topPosition = layoutManager.findFirstVisibleItemPosition()
 
             val hasReachedToEnd = topPosition + visibleItems >= sizeOfTheCurrentList
             val shouldPaginate = !isLoading && !isLastPage && hasReachedToEnd && isScrolling
@@ -119,4 +145,5 @@ class NewsFragment : Fragment() {
         }
 
     }
+
 }
