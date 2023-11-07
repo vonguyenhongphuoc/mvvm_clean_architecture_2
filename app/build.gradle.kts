@@ -4,6 +4,7 @@ plugins {
     kotlin("kapt")
     id("com.google.dagger.hilt.android")
     id("androidx.navigation.safeargs.kotlin")
+    id("com.google.devtools.ksp")
 }
 
 android {
@@ -64,6 +65,7 @@ dependencies {
     val lifecycle = "2.6.2"
     val hilt = "2.44"
     val nav = "2.5.3"
+    val glide = "4.16.0"
 
     implementation("androidx.core:core-ktx:1.9.0")
     implementation("androidx.appcompat:appcompat:1.6.1")
@@ -88,5 +90,9 @@ dependencies {
     kapt("com.google.dagger:hilt-android-compiler:$hilt")
     implementation("androidx.navigation:navigation-fragment-ktx:$nav")
     implementation("androidx.navigation:navigation-ui-ktx:$nav")
+
+    implementation("com.github.bumptech.glide:glide:$glide")
+    ksp("com.github.bumptech.glide:ksp:$glide")
+
 
 }
