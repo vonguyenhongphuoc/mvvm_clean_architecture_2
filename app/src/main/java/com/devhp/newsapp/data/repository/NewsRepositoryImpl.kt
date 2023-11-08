@@ -23,7 +23,8 @@ class NewsRepositoryImpl(
                 return Resource.Success(result)
             }
         }
-        return Resource.Error(response.message())
+        return Resource.Error(response.errorBody()?.string().toString())
+
     }
 
 
@@ -46,7 +47,7 @@ class NewsRepositoryImpl(
     }
 
     override suspend fun deleteNews(article: Article) {
-        TODO("Not yet implemented")
+        newsLocalDataSource.deleteArticleFromDB(article)
     }
 
     override fun getSavedNews(): Flow<List<Article>> {

@@ -1,6 +1,7 @@
 package com.devhp.newsapp.data.db
 
 import androidx.room.Dao
+import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
@@ -13,5 +14,9 @@ interface ArticleDAO {
     suspend fun insert(article: Article)
 
     @Query("SELECT * FROM articles")
-    fun getAllArticles() : Flow<List<Article>>
+    fun getAllArticles(): Flow<List<Article>>
+
+    @Delete
+    suspend fun deleteArticle(article: Article)
+
 }

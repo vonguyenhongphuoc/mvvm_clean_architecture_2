@@ -1,6 +1,7 @@
 package com.devhp.newsapp.presentation.di
 
 import android.app.Application
+import com.devhp.newsapp.domain.usecase.DeleteSavedNewsUseCase
 import com.devhp.newsapp.domain.usecase.GetNewsHeadlinesUseCase
 import com.devhp.newsapp.domain.usecase.GetSavedNewsUseCase
 import com.devhp.newsapp.domain.usecase.GetSearchedNewsUseCase
@@ -25,13 +26,15 @@ class FactoryModule {
         getSearchedNewsUseCase: GetSearchedNewsUseCase,
         saveNewsUseCase: SaveNewsUseCase,
         getSavedNewsUseCase: GetSavedNewsUseCase,
+        deleteSavedNewsUseCase: DeleteSavedNewsUseCase
     ): NewsViewModelFactory {
         return NewsViewModelFactory(
             app,
             getNewsHeadlinesUseCase,
             getSearchedNewsUseCase,
             saveNewsUseCase,
-            getSavedNewsUseCase
+            getSavedNewsUseCase,
+            deleteSavedNewsUseCase
         )
     }
 }

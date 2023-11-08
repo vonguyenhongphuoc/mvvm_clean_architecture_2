@@ -101,5 +101,6 @@ dependencies {
     implementation("androidx.room:room-ktx:$room")
     implementation("androidx.room:room-ktx:$room")
 
+    implementation("com.squareup.okhttp3:logging-interceptor:$okhttp")
 
 }
