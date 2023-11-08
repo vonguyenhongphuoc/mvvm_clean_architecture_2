@@ -27,5 +27,12 @@
         android:id="@+id/infoFragment"
         android:name="com.devhp.newsapp.presentation.fragment.InfoFragment"
         android:label="fragment_info"
-        tools:layout="@layout/fragment_info" />
+        tools:layout="@layout/fragment_info" >
+        <argument
+            android:name="selected_article"
+            android:defaultValue="@null"
+            app:nullable="true"
+            app:argType="com.devhp.newsapp.data.model.Article" />
+
+    </fragment>
 </navigation>

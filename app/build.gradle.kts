@@ -66,6 +66,7 @@ dependencies {
     val hilt = "2.44"
     val nav = "2.5.3"
     val glide = "4.16.0"
+    val room = "2.6.0"
 
     implementation("androidx.core:core-ktx:1.9.0")
     implementation("androidx.appcompat:appcompat:1.6.1")
@@ -93,6 +94,12 @@ dependencies {
 
     implementation("com.github.bumptech.glide:glide:$glide")
     ksp("com.github.bumptech.glide:ksp:$glide")
+
+
+    implementation("androidx.room:room-runtime:$room")
+    kapt("androidx.room:room-compiler:$room")
+    implementation("androidx.room:room-ktx:$room")
+    implementation("androidx.room:room-ktx:$room")
 
 
 }

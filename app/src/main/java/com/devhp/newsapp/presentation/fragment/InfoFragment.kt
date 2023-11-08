@@ -4,22 +4,48 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
+import android.webkit.WebViewClient
 import androidx.fragment.app.Fragment
-import com.devhp.newsapp.R
+import androidx.navigation.fragment.navArgs
+import com.devhp.newsapp.databinding.FragmentInfoBinding
+import com.devhp.newsapp.presentation.MainActivity
+import com.devhp.newsapp.presentation.viewmodel.NewsViewModel
+import com.google.android.material.snackbar.Snackbar
 
 class InfoFragment : Fragment() {
 
 
+    private lateinit var binding: FragmentInfoBinding
+    private lateinit var viewModel: NewsViewModel
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
-    ): View? {
-        // Inflate the layout for this fragment
-        Toast.makeText(requireActivity(), "onCreateView InfoFragment", Toast.LENGTH_SHORT).show()
-        return inflater.inflate(R.layout.fragment_info, container, false)
+    ): View {
+        binding = FragmentInfoBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        val args: InfoFragmentArgs by navArgs()
+        val article = args.selectedArticle
+        viewModel = (activity as MainActivity).viewModel
+        binding.wvInfo.apply {
+            webViewClient = WebViewClient()
+            if (article != null) {
+                if (article.url != "") {
+                    loadUrl(article.url)
+                }
+            }
+        }
+
+        binding.fabSave.setOnClickListener {
+            if (article != null) {
+                viewModel.saveArticle(article)
+            }
+            Snackbar.make(view, "Saved Successfully", Snackbar.LENGTH_LONG).show()
+        }
+    }
 
 
 }

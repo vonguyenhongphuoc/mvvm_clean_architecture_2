@@ -1,9 +1,17 @@
 package com.devhp.newsapp.data.model
 
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
+import java.io.Serializable
 
+@Entity(
+    tableName = "articles"
+)
 data class Article(
+    @PrimaryKey(autoGenerate = true)
+    val id: Int? = null,
     @SerializedName("author")
     val author: String?,
     @SerializedName("content")
@@ -19,5 +27,5 @@ data class Article(
     @SerializedName("url")
     val url: String,
     @SerializedName("urlToImage")
-    val urlToImage: String?
-)
+    val urlToImage: String?,
+) : Serializable

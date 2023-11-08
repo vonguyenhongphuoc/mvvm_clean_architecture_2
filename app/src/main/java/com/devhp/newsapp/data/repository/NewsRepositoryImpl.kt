@@ -2,6 +2,7 @@ package com.devhp.newsapp.data.repository
 
 import com.devhp.newsapp.data.model.APIResponse
 import com.devhp.newsapp.data.model.Article
+import com.devhp.newsapp.data.repository.datasource.NewsLocalDataSource
 import com.devhp.newsapp.data.repository.datasource.NewsRemoteDataSource
 import com.devhp.newsapp.data.util.Resource
 import com.devhp.newsapp.domain.repository.NewsRepository
@@ -10,6 +11,7 @@ import retrofit2.Response
 
 class NewsRepositoryImpl(
     private val newsRemoteDataSource: NewsRemoteDataSource,
+    private val newsLocalDataSource: NewsLocalDataSource,
 ) : NewsRepository {
     override suspend fun getNewsHeadlines(country: String, page: Int): Resource<APIResponse> {
         return responseToResource(newsRemoteDataSource.getTopHeadlines(country, page))
@@ -25,12 +27,22 @@ class NewsRepositoryImpl(
     }
 
 
-    override suspend fun getSearchedNews(searchQuery: String): Resource<APIResponse> {
-        TODO("Not yet implemented")
+    override suspend fun getSearchedNews(
+        country: String,
+        searchQuery: String,
+        page: Int,
+    ): Resource<APIResponse> {
+        return responseToResource(
+            newsRemoteDataSource.getSearchedTopHeadlines(
+                country,
+                searchQuery,
+                page
+            )
+        )
     }
 
     override suspend fun saveNews(article: Article) {
-        TODO("Not yet implemented")
+        newsLocalDataSource.saveArticleToDB(article)
     }
 
     override suspend fun deleteNews(article: Article) {
@@ -38,6 +50,6 @@ class NewsRepositoryImpl(
     }
 
     override fun getSavedNews(): Flow<List<Article>> {
-        TODO("Not yet implemented")
+        return newsLocalDataSource.getSavedArticles()
     }
 }
